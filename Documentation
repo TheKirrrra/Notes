@@ -1,0 +1,91 @@
+# Notes App — Project Documentation
+
+## Overview
+Simple Laravel notes application with authentication. Technologies used:
+- PHP (Laravel)
+- JavaScript
+- NPM / frontend assets
+- Composer
+
+## Quick requirements
+- PHP 8+
+- Composer
+- Node.js & NPM
+- MySQL / SQLite (configured in `.env`)
+
+## Setup (fresh clone)
+1. Copy environment:
+   - `cp .env.example .env`
+   - Configure DB and APP_URL in `.env`
+2. Install PHP dependencies:
+   - `composer install`
+3. Install JS dependencies and build assets:
+   - `npm install`
+   - `npm run dev` (or `npm run build`)
+4. Generate app key and migrate:
+   - `php artisan key:generate`
+   - `php artisan migrate`
+5. Run the app:
+   - `php artisan serve`
+
+## Routes (summary)
+Major routes are defined in `routes/web.php`:
+- `GET /` — welcome page (public)
+- `GET /dashboard` — dashboard (auth + verified)
+- Notes (auth middleware):
+  - `GET /notes` — list notes
+  - `POST /notes` — create note
+  - `GET /notes/{note}/edit` — edit form
+  - `PUT /notes/{note}` — update
+  - `DELETE /notes/{note}` — delete
+
+Authentication routes are loaded from `routes/auth.php`.
+
+## Change default post-login/registration redirect
+If after login/registration users are redirected to `/dashboard` but you want `/`, change the `HOME` constant:
+- File: `app/Providers/RouteServiceProvider.php`
+- Change:
+  - from: `const HOME = '/dashboard';`
+  - to: `const HOME = '/';`
+
+This updates `redirect()->intended(...)` targets used by auth controllers.
+
+## Styling / dark theme issues
+If the app uses a dark background and text is not visible on `/` (welcome page):
+- Check `resources/views/welcome.blade.php` and other view files for text color classes or inline styles.
+- Check your CSS (e.g. `resources/css/app.css` or Tailwind config) for body/background and text color.
+- Common fixes:
+  - Ensure text color contrasts the dark background (for example `color: #fff;` or Tailwind `text-white`).
+  - If you changed a global CSS variable, verify it doesn't set `color: transparent` or same value as background.
+
+Files to review/update:
+- `resources/views/welcome.blade.php`
+- Any layout or component views used by welcome/dashboard (for example `resources/views/layouts/app.blade.php`)
+- `resources/css/app.css` or Tailwind config
+
+## Troubleshooting checklist
+- After changing `RouteServiceProvider::HOME`, clear caches:
+  - `php artisan config:cache`
+  - `php artisan route:cache`
+  - `php artisan view:clear`
+- If `/` renders but text is missing:
+  - Inspect page HTML (browser DevTools) to confirm text exists in DOM.
+  - If present but invisible, confirm CSS color/opacity and z-index.
+  - If not present, confirm `welcome.blade.php` content and that the route returns the correct view.
+
+## Useful artisan/npm commands
+- `php artisan migrate`
+- `php artisan serve`
+- `php artisan tinker`
+- `npm run dev` (dev assets)
+- `npm run build` (production assets)
+
+## Where to edit common behavior
+- Routes: `routes/web.php`
+- Auth config / redirects: `app/Providers/RouteServiceProvider.php`
+- Views: `resources/views/`
+- CSS / JS: `resources/css/`, `resources/js/`
+
+## Notes
+- The project loads `require __DIR__.'/auth.php';` from routes for authentication scaffolding.
+- If you need exact changes to `welcome.blade.php` or other files, provide the files and the desired visual style and the docs can include exact snippets.
