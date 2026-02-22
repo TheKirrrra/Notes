@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
+        if (Schema::hasTable('notes')) {
+            return;
+        }
+
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
             $table->string('title');
@@ -21,4 +25,3 @@ return new class extends Migration {
         Schema::dropIfExists('notes');
     }
 };
-

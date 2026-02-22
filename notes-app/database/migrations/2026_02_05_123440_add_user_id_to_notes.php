@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('notes', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        });
+        if (!Schema::hasColumn('notes', 'user_id')) {
+            Schema::table('notes', function (Blueprint $table) {
+                $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            });
+        }
     }
 
 
@@ -22,8 +24,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('notes', function (Blueprint $table) {
-            //
-        });
+        if (Schema::hasColumn('notes', 'user_id')) {
+            Schema::table('notes', function (Blueprint $table) {
+                $table->dropForeign(["user_id"]);
+                $table->dropColumn('user_id');
+            });
+        }
     }
 };

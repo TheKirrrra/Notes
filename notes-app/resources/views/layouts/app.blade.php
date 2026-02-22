@@ -18,38 +18,13 @@
 
 
     <!-- Верхнее меню -->
-    <nav class="bg-gradient-to-r from-indigo-700 via-indigo-800 to-gray-900 text-white px-6 py-4 flex justify-between items-center border-2 border-indigo-600 rounded-lg shadow-2xl ring-1 ring-indigo-600/30">
-    <!-- Левая часть: вкладки -->
-        <div class="flex gap-4">
-            <a href="{{ url('/') }}"
-               class="hover:bg-gray-700 px-3 py-2 rounded {{ request()->is('/') ? 'bg-gray-900' : '' }}">
-                Main
-            </a>
-            <a href="{{ url('/notes') }}"
-               class="hover:bg-gray-700 px-3 py-2 rounded {{ request()->is('notes*') ? 'bg-gray-900' : '' }}">
-                Notes
-            </a>
-        </div>
-
-        <!-- Правая часть: авторизация -->
-        <div class="flex gap-4 items-center">
-            @auth
-                <span>Hey ho, {{ Auth::user()->name }}</span>
-
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="hover:underline">Logout</button>
-                </form>
-            @else
-                <a href="{{ route('login') }}" class="hover:underline">Login</a>
-                <a href="{{ route('register') }}" class="hover:underline">Registration</a>
-            @endauth
-        </div>
-    </nav>
+    @include('partials.nav')
 
     <!-- Основной контент -->
     <main class="py-8">
-        @yield('content')
+        <div class="max-w-6xl mx-auto px-4">
+            @yield('content')
+        </div>
     </main>
 
     </body>
