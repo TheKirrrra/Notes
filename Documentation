@@ -112,6 +112,3 @@ npm run build
 - Views: `resources/views/`
 - Models: `app/Models/`
 - Migrations: `database/migrations/`
-
----
-If you want, I can generate a short `README.md` inside `notes-app/` (or update the existing one) with quick start steps and links to the important files — tell me if you prefer a short README or a more detailed one with examples and curl snippets for the chat API.
